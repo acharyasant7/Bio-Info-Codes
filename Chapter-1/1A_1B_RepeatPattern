@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 13 21:10:54 2020
+
+@author: sandesh
+"""
+
+#Function that takes input the string and kmer, and returns all sub-strings of
+#k-mer length which are repeated the most inside a string
+def FrequentWords(string, kmer):
+    a = len(string) - kmer +1
+    Frequentword = set()
+    Counts = [None] * a
+    for i in range(0, a, 1):
+        Pattern = string[i:i+kmer]
+        Counts[i] = PatternFind(string, Pattern)
+    
+    maxCount = max(Counts)
+    
+    for i in range(0,a,1):
+        if Counts[i] == maxCount:
+            adds = ''.join(string[i: i+kmer])
+            Frequentword.add(adds)
+    return Frequentword
+    
+
+    
+    
+#Taking DNA String as input and changing it into list. Also, taking kmer as input.
+DNA = input("Enter your DNA String in Capital: \n")
+string = list(DNA)
+kmer = int(input("Enter the k-mer of frequentwords:"))
+print(FrequentWords(string, kmer))
+
+
+#Function to return how many times a pattern is repeated in a string
+def PatternFind(string, pattern):
+    a = len(string) - len(pattern) +1
+    count = 0
+
+    for i in range(0,a,1):
+        m = 0
+        for j in range(0, len(pattern), 1):
+            if pattern[j] == string[i]:
+                m = m+1
+                i = i+1
+        if m == len(pattern):
+            count = count +1
+        
+    return count
+        
+       
+
+  

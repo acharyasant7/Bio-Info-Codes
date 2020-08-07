@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 20 19:29:35 2020
+
+@author: sandesh
+"""
+
+#Approximate Pattern Matching Problem
+
+def ApproxPattern(string, pattern, d):
+    
+    Position = set()
+    a = len(string)- len(pattern)+1
+    
+    for i in range(0, a, 1):
+        m = i
+        count = 0
+        for j in range(0, len(pattern),1):
+            
+            if string[m] != pattern[j]:
+                count = count+1
+            m = m+1
+        if count<2:
+            Position.add(i+1)
+    return(Position)
+    
+DNA = input("Please enter the string in all capital")
+Pattern = input("Please enter the pattern in all capital")
+string = list(DNA)
+pattern = list(Pattern)
+d = int(input("Enter the number of mismatches"))
+
+print(ApproxPattern(string, pattern, d))

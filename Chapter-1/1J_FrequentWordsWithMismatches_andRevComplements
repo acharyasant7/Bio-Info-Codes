@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 20 20:07:48 2020
+
+@author: sandesh
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 20 19:29:35 2020
+
+@author: sandesh
+"""
+
+#Approximate Pattern Matching Problem
+def reversecomplement(DNAlist):
+    
+    for i in range(0,len(DNAlist),1):
+        if DNAlist[i] == "A":
+            DNAlist[i] = "T"
+        elif DNAlist[i] == "G":
+            DNAlist[i] = "C"
+        elif DNAlist[i] == "C":
+            DNAlist[i] = "G"
+        elif DNAlist[i] == "T":
+            DNAlist[i] = "A"
+        
+    DNAlist.reverse()
+    revcom = ''.join(DNAlist[0: len(DNAlist)])
+    return revcom
+
+def PatternFind(string, pattern, d):
+    a = len(string) - len(pattern) +1
+    count = 0
+    b = len(pattern) - d
+    for i in range(0,a,1):
+        m = 0
+        for j in range(0, len(pattern), 1):
+            if pattern[j] == string[i]:
+                m = m+1
+            i = i+1
+        if b <= m <= len(pattern):
+            count = count +1
+        
+    return count
+    
+def FrequentWords(string, kmer,d):
+    a = len(string) - kmer +1
+    Frequentword = set()
+    Counts = [None] * a
+    RCounts = [None] *a
+    TotCount = [None] *a
+    
+    for i in range(0, a, 1):
+        Pattern = string[i:i+kmer]
+        RevCom = reversecomplement(Pattern)
+        Counts[i] = PatternFind(string, Pattern,d)
+        RCounts[i] = PatternFind(string, RevCom,d)
+        TotCount[i] = Counts[i] + RCounts[i]
+
+    maxCount = max(TotCount)
+    print(maxCount)
+    for i in range(0,a,1):
+        if TotCount[i] == maxCount:
+            adds = ''.join(string[i: i+kmer])
+            Frequentword.add(adds)
+    return Frequentword
+   
+    
+DNA = input("Please enter the string in all capital")
+kmer = int(input("Please enter the kmer"))
+string = list(DNA)
+d = int(input("Enter the number of mismatches"))
+
+print(FrequentWords(string, kmer, d))
+

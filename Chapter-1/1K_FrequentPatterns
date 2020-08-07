@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug  6 08:22:00 2020
+
+@author: sandesh
+"""
+import numpy as np
+
+
+kmer = int(input("What is the kmer?"))
+string = input("Please enter the string")
+
+def lexicograph(x):
+    from itertools import product
+    kmers = [''.join(c) for c in product('ATGC', repeat = x)]
+    return kmers
+
+#def NumbertoPatters(a,b):
+ #   x = lexicograph(a)
+  #  y = x[b]
+   # print(y)
+
+#def PatterntoNumber(pat):
+#    m = len(pat)
+ #   x = lexicograph(m)
+  #  Counts = [None] * len(x)
+   # for i in range(0,(len(x)),1):
+    #    if pat == x[i]:
+     #       return i
+
+x = lexicograph(kmer)
+Counts = [0] * len(x)
+
+def FrequentWords(string,x):
+    Frequentword = set()
+    
+    for j in range(0, len(string)-kmer+1):
+        
+        for i in range(0, len(x),1):
+            
+            if x[i] == string[j : j+kmer]:
+                
+                Counts[i] = Counts[i] + 1
+    
+    maxcount = max(Counts)
+    
+    for i in range(0, len(x)):
+        if Counts[i] == maxcount:
+            Frequentword.add(x[i])
+    return Frequentword
+
+print(FrequentWords(string, x))                
