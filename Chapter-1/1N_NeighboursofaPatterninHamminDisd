@@ -16,13 +16,10 @@ def HammingsDistance(pattern, text):
     return count
 
 def Neighbors(Pattern, d):
-    
-   
+     
     if d == 0:
         return {Pattern}
     
-    if len(Pattern) == 1:
-        return {'A','T','G','C'}
     Neighbourhood = [] #empty set
     SuffixNeighbors = Neighbors(Pattern[1:], d-1)
    
