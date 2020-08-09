@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Aug  9 15:33:57 2020
+
+@author: sandesh
+"""
+
+def HammingsDistance(pattern, text): 
+    
+    count = 0
+    for i in range(0, len(pattern), 1):
+        if pattern[i] != text[i]:
+            count = count+1
+
+    return count
+
+def Neighbors(Pattern, d):
+    
+   
+    if d == 0:
+        return {Pattern}
+    
+    if len(Pattern) == 1:
+        return {'A','T','G','C'}
+    Neighbourhood = [] #empty set
+    SuffixNeighbors = Neighbors(Pattern[1:], d-1)
+   
+    for text in SuffixNeighbors:
+        for c in chars:
+            if c != Pattern[0]:
+                Neighbourhood.append(c + text)
+    
+    if d < len(Pattern):
+        SuffixNeighbors = Neighbors(Pattern[1:], d)
+        for text in SuffixNeighbors:
+            r = text + Pattern[0]
+            Neighbourhood.append(r)
+        
+    return Neighbourhood
+chars = "AGTC"
+print(Neighbors('ATG', 1))
+
+ 
