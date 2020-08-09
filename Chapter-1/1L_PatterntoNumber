@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Aug  9 08:59:34 2020
+
+@author: sandesh
+"""
+
+#Code to Determine how many k-mers are present before the given pattern in lexicographically
+#ordered k-mers
+#Lexicographcally ordered DNA patterns in order A,C,G,T
+
+def SymboltoNumber(sym):
+    if sym == 'A':
+        return 0
+    elif sym == 'C':
+        return 1
+    elif sym == 'G':
+        return 2
+    elif sym == 'T':
+        return 3
+
+def PatterntoNumber(Pattern):
+    if len(Pattern) ==1 :
+        return SymboltoNumber(Pattern)
+    a = len(Pattern)-1
+    sym = Pattern[a]
+    Prefix = Pattern[:-1]
+    num = 4 * PatterntoNumber(Prefix) + SymboltoNumber(sym)
+    return num
+
+m = (PatterntoNumber('AGTCAG')) #determines how many k-mers are before the given pattern
+pos = m +1 #returns the position of the pattern in lexicographically ordered k-mers
+print(m)
