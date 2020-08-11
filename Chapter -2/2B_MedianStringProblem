@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Aug 10 20:53:22 2020
+
+@author: sandesh
+"""
+def lexicograph(x):
+    from itertools import product
+    kmers = [''.join(c) for c in product('ATGC', repeat = x)]
+    return kmers
+
+def Dist(pattern, Dna):
+    m = 0
+    
+    for text in Dna:        
+        k = len(text) - len(pattern) + 1
+        Counts = [0]*k
+        for i in range(0, k):
+            dist = 0
+            for j in range(0, len(pattern)):
+                if pattern[j] != text[i+j]:
+                    dist = dist + 1
+            Counts[i] = dist
+        for i in range(0,k):
+            if Counts[i] == min(Counts):
+                m = m + Counts[i]
+                break
+    return m
+                
+def MedianString(k, Dna):
+    pat = lexicograph(k)
+    distance = float('inf')
+    for pattern in pat:
+        dist = Dist(pattern, Dna)
+        if (distance > dist ):
+            distance = dist
+            Median = pattern
+    return Median
+
+
+k = 6
+Dna = ["TAGAAGTGTGGCTCTCGCACGGTTACCAAGAAAGAAGAAAAA",
+       "GGCCGAGACATCTCGCTTTCTATCTAGAAGGGAGTAATGTGA",
+       "CGTCAGTAGAGGTGGCGCAAGTAAGTATGGACATTTATAATG",
+       "TAGAAGAGTCAGTGTACACTCGGGGGTAAACATCAGGAACCA",
+       "GTCCCCAGAGCGGAACAGAAAGCGTAGAAGTCTACTTACTTC",
+       "GTTATTACAAATTAGAGGTGGGACGGCATGGAGAAATCGTCG",
+       "ATTTTTTAATGATATCTCCGGGGGTGTGTTTGGTAGTAGAAG",
+       "TAGAAGATAGGTGGTTAGCATATCACATATCGAACGTTCACA",
+       "TGAGCACACTGCTCTCCGTGAATCTCTATCTAGACGGACATA",
+       "TAGTGAACGCATTGCTACCGGAGGTAGATGAACCTGTAGGAC"]
+print(MedianString(k, Dna))
