@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Aug 16 23:16:06 2020
+
+@author: sandesh
+"""
+
+
+def StringComposition(Dna,k):
+    m = len(Dna)-k+1
+    texts = []
+    for i in range(m):
+        pat = Dna[i:i+k] #creating different k-mers from the string Dna
+        texts.append(pat)
+    print(texts)
+    texts.sort() #sorts the items in list: texts in lexicograph order
+    return texts
+        
+DNA = "TATGGGGTGC"
+k = 3
+print(StringComposition(DNA,k))
