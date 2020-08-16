@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Aug 14 19:00:32 2020
+
+@author: sandesh
+"""
+
+
+def Profile_most_prob_kmer(Dna, k, matrix):
+    m = len(Dna) - k +1
+    Prob = [0]*m
+    for i in range(0,m):
+        string = Dna[i:i+k]
+        P = 1
+        for j in range(0,k):
+            s = i + j
+            P = P * Probality_from_matrix(matrix, j, string[j])
+        Prob[i] = P
+    
+    for i in range(0,m):
+        if Prob[i] == max(Prob):
+            print(max(Prob))
+            return Dna[i:i+k]
+
+def Probality_from_matrix(matrix,i,text):
+    if text == 'A':
+        return matrix[0][i]
+    elif text == 'C':
+        return matrix[1][i]
+    elif text == 'G':
+        return matrix[2][i]
+    elif text == 'T':
+        return matrix[3][i]
+        
+
+Dna = input("Enter the text")
+k = int(input("Enter the k-mer"))
+matrix = []
+for i in range(0, 4):
+    a = []
+    for j in range(0,k):
+       a.append(float(input()))
+    matrix.append(a)
+
+print(Profile_most_prob_kmer(Dna, k, matrix))
