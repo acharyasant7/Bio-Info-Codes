@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Aug 16 23:52:44 2020
+
+@author: sandesh
+"""
+
+
+
+my_file = open("3c.txt", "r") 
+content = my_file.read() #reads the content of the file
+Patterns = content.split("\n") #converts all patterns into list of patterns
+Patterns.remove("")
+print(Patterns)
+k = len(Patterns[0])
+f=open('f1.txt','w')
+count = 0
+for i in Patterns:
+        
+    Prefix_i = i[:k-1]
+        
+    for  j in Patterns:
+            
+        Suffix_j = j[1:]
+            
+        if Prefix_i == Suffix_j:
+            f.write(j +"  -> "+ i + '\n')
+            count = count+1
+
+
+f.close()
