@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 25 13:36:28 2020
+
+@author: sandesh
+"""
+#This code is for the number of editing required so that both strings will be same. 
+#We know that, the number of changes required in one string will be the same as required in another string(so can take any)
+#The basis is: create a similar matrix with one string in row and another in column
+#For every cell, if the character is same, take the diagnonal value, else add 1 to the value upwards and to the left and select the minimum from them.
+#As we are selecting minimum from the values the score at the last cell will give the minimum number of edits required. 
+
+import numpy as np
+
+def EditDistance(stringa, stringb):
+    
+    m = len(stringa) + 1
+    n = len(stringb) +1
+    M = np.zeros((m, n))
+    
+    for i in range(1, m) :
+        M[i][0] = i
+    for j in range(1,n):
+        M[0][j] = j
+        
+    for i in range(1,m):
+        for j in range(1,n):
+            if stringa[i-1] == stringb[j-1]:
+                M[i][j] = M[i-1][j-1]
+            else:
+                M[i][j] = min(M[i-1][j]+1, M[i][j-1]+1, M[i-1][j-1]+1)
+    print(M)           
+    
+stringa = "PLEASANTLY"
+stringb = "MEANLY"
+
+EditDistance(stringa, stringb)

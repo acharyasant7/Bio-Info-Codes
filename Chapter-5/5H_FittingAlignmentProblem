@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 25 15:40:39 2020
+
+@author: sandesh
+"""
+
+#This is a fitting alignment problem. The algorithm is very simple. Create a distance matrix as for global alignment.
+#Because, we are aligning one string through its entire length to another string. 
+
+#Now, select the maximum value from the last row/column (where the shorter string/sequence placed). But, keep in mind that
+#Select the value from the longer string(in matrix) only after the cells corresponding to the length of shorter string. 
+#Because, if you select the cell which is less than the length of short string, it will give local alignments. 
+
+#Finally, backtrack in similar way until the length of the shorter string becomes 0.
+import numpy as np
+
+def Score(a,b,ma, mm):
+    if stringa[a] == stringb[b]:
+        return ma
+    else:
+        return mm
+    
+    
+def GlobalAlignment(stringa,stringb, ma , indel, mm):
+    i = len(stringa)
+    j = len(stringb)
+    dis_matrix = np.zeros((i+1, j+1))
+    dis_matrix[0][0] = 0
+    Backtrack = np.zeros((i+1, j+1))
+    
+    Alignment = []
+    Alignment2 = []
+    
+        
+    for m in range(1, i+1):
+        for n in range(1, j+1):
+            diag = dis_matrix[m-1][n-1]+ Score(m-1,n-1,ma,mm)
+            left = dis_matrix[m][n-1] + indel
+            up = dis_matrix[m-1][n]+ indel
+            
+            dis_matrix[m][n] = max(diag, left , up )
+            
+            if dis_matrix[m][n] == diag:
+                Backtrack[m][n] = 3     
+                          #3 signifies values obtained from diagonally
+            elif dis_matrix[m][n] == left:
+                Backtrack[m][n] = 2
+            
+            elif dis_matrix[m][n] == up:
+                Backtrack[m][n] = 1  
+            
+    n = len(stringb)
+    ln = len(stringa)
+    k = []
+    for row in range(n, ln+1):
+        k.append(dis_matrix[row][n])
+    max_score = max(k)
+    for i in range(0, ln-n+2): 
+        if k[i] == max_score:
+            break
+    m = i + n
+    while n>0:
+        if Backtrack[m][n] == 1:
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append('-')
+            m = m-1
+        elif Backtrack[m][n] ==2:
+            Alignment.append('-')
+            Alignment2.append(stringb[n-1])
+            n = n-1
+        elif Backtrack[m][n] == 3:
+             
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append(stringb[n-1])
+            m = m-1
+            n = n-1
+    Alignment = ''.join(Alignment[::-1])
+    Alignment2 =''.join(Alignment2[::-1])
+    print(m,n)
+    print(dis_matrix)  
+    print("", Alignment,'\n',Alignment2)
+    
+ma = 1 #match
+indel = -1#indel
+mm = -1 #mismatch
+
+stringa = "GTAGGCTTAAGGTTA"
+stringb = "TAGATA"
+
+GlobalAlignment(stringa, stringb, ma, indel, mm)

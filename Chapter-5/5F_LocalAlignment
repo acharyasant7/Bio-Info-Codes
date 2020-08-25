@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 25 13:22:07 2020
+
+@author: sandesh
+"""
+
+#This code is similar to the global alignment. Create a distance matrix and backtrack matrix for the two sequences similarly. 
+#While backtracking, start with the maximum value in the distance matrix and continue until the value in distance matrix is 0.
+import numpy as np
+
+def Score(a,b,ma, mm):
+    if stringa[a] == stringb[b]:
+        return ma
+    else:
+        return mm
+    
+    
+def LocalAlignment(stringa,stringb, ma , indel, mm):
+    i = len(stringa)
+    j = len(stringb)
+    dis_matrix = np.zeros((i+1, j+1))
+    dis_matrix[0][0] = 0
+    Backtrack = np.zeros((i+1, j+1))
+    
+    Alignment = []
+    Alignment2 = []
+                         
+        
+    for m in range(1, i+1):
+        for n in range(1, j+1):
+            diag = dis_matrix[m-1][n-1]+ Score(m-1,n-1,ma,mm)
+            left = dis_matrix[m][n-1] + indel
+            up = dis_matrix[m-1][n]+ indel
+            
+            dis_matrix[m][n] = max(diag, left , up, 0 )
+            
+            if dis_matrix[m][n] == diag:
+                Backtrack[m][n] = 3                     #3 signifies values obtained from diagonally
+            elif dis_matrix[m][n] == left:
+                Backtrack[m][n] = 2
+            elif dis_matrix[m][n] == up:
+                Backtrack[m][n] = 1
+    
+    max_val = (max(map(max, dis_matrix)))
+    
+    for m in range(1, i+1):
+        for n in range(1, j+1):
+            if dis_matrix[m][n] == max_val:
+                break
+        else:
+            continue  # only executed if the inner loop did NOT break
+        break
+    
+    while dis_matrix[m][n] !=0:
+        if Backtrack[m][n] == 1:
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append('-')
+            m = m-1
+        elif Backtrack[m][n] ==2:
+            Alignment.append('-')
+            Alignment2.append(stringb[n-1])
+            n = n-1
+        elif Backtrack[m][n] == 3:
+             
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append(stringb[n-1])
+            m = m-1
+            n = n-1
+    Alignment = ''.join(Alignment[::-1])
+    Alignment2 =''.join(Alignment2[::-1])
+      
+    print("", Alignment,'\n',Alignment2)
+    print("The score is:", max_val)
+
+ma = 2 #match
+indel = -2#indel
+mm = -1 #mismatch
+
+stringa = "GATTCTATCTAACTA"
+stringb = "TTATA"
+
+LocalAlignment(stringa, stringb, ma, indel, mm)
