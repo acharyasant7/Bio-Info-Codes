@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug 20 17:25:25 2020
+
+@author: sandesh
+"""
+
+#This code determines all the peptide coding sub-strings from a DNA string, such that the peptide is given.
+#DNA may code for protein from any of its strand, hence, we must check for given string
+#as well as its reverse complement if the sub-string codes for the given peptide
+
+def reversecomplement(DNA):
+    DNAlist = list(DNA)
+    for i in range(0,len(DNAlist),1):
+        if DNAlist[i] == "A":
+            DNAlist[i] = "T"
+        elif DNAlist[i] == "G":
+            DNAlist[i] = "C"
+        elif DNAlist[i] == "C":
+            DNAlist[i] = "G"
+        elif DNAlist[i] == "T":
+            DNAlist[i] = "A"
+        
+    DNAlist.reverse()
+    revcom = ''.join(DNAlist[0: len(DNAlist)])
+    return revcom
+
+def PeptideEncoding(Dna, Peptide, GeneticCode):
+    m = len(Peptide)*3
+    DCode = []
+    for i in range(0, len(Dna)-m+1, 1):
+        Pattern = Dna[i:i+m]
+        protein = ProteinTranslation(Pattern, GeneticCode)
+        if protein == Peptide:
+            DCode.append(Pattern)
+        revcom = reversecomplement(Pattern)
+        protein2 = ProteinTranslation(revcom, GeneticCode)
+        if protein2 == Peptide:
+            DCode.append(Pattern)
+        
+    return DCode
+    
+    
+def ProteinTranslation(Pattern, GeneticCode):
+    protein = []
+    for i in range(0, len(Pattern), 3):
+        codon = Pattern[i:i+3]
+        aminoacid = GeneticCode[codon] 
+        protein.append(aminoacid)
+    protein = ''.join(protein)
+    return protein
+    
+Dna = "ATGGCCATGGCCCCCAGAACTGAGATCAATAGTACCCGTATTAACGGGTGA"
+GeneticCode = { 
+        'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M', 
+        'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T', 
+        'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K', 
+        'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',                  
+        'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L', 
+        'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P', 
+        'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q', 
+        'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R', 
+        'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V', 
+        'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A', 
+        'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E', 
+        'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G', 
+        'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S', 
+        'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L', 
+        'TAC':'Y', 'TAT':'Y', 'TAA':'_', 'TAG':'_', 
+        'TGC':'C', 'TGT':'C', 'TGA':'_', 'TGG':'W', 
+    }
+Peptide = "MA"
+stringlist = PeptideEncoding(Dna, Peptide, GeneticCode)
+
+f = open("4B.txt", 'w')
+for s in stringlist:
+    f.write(s + "\n")
+f.close()
