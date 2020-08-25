@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Aug 17 11:16:29 2020
+
+@author: sandesh
+"""
+ #This code returns DeBruijn Graph from the patterns provided as input. 
+def DeBruijin(Patterns):
+    mers = []
+    for text in Patterns:
+        prefix = text[:-1]
+        mers.append(prefix)
+        suffix = text[1:]
+        mers.append(suffix)
+    
+    merlist = list(dict.fromkeys(mers))
+    
+    for nodes in merlist:
+        alledges = []
+        for pat in Patterns:
+            if nodes == pat[:-1]:
+                alledges.append(pat[1:])
+        print(nodes, " -> ", alledges)
+            
+Patterns = ['AAT', 'ATG', 'ATG', 'ATG', 'CAT','CCA', 'GAT','GCC','GGA','GGG','GTT','TAA','TGC','TGG','TGT']
+
+DeBruijin(Patterns)
