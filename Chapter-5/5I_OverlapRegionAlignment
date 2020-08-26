@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Aug 25 17:00:17 2020
+
+@author: sandesh
+"""
+
+#This code determines the Overlap between any two strings, such that the overlap region has the maximum score 
+#obtained by global alignment between two strings in overlap region. 
+#The algorithm is simple: Create a distance matrix, find the maximum value in the last row/column, and from the maximum value
+#backtrack until the first row/first column to find the overlap region with maximum score.
+
+import numpy as np
+
+def Score(a,b,ma, mm):
+    if stringa[a] == stringb[b]:
+        return ma
+    else:
+        return mm
+    
+    
+def GlobalAlignment(stringa,stringb, ma , indel, mm):
+    i = len(stringa)
+    j = len(stringb)
+    dis_matrix = np.zeros((i+1, j+1))
+    dis_matrix[0][0] = 0
+    Backtrack = np.zeros((i+1, j+1))
+    
+    max_score = -3*(len(stringa)+len(stringb))
+    Alignment = []
+    Alignment2 = []
+    
+    for m in range(1, i+1):
+        for n in range(1, j+1):
+            diag = dis_matrix[m-1][n-1]+ Score(m-1,n-1,ma,mm)
+            left = dis_matrix[m][n-1] + indel
+            up = dis_matrix[m-1][n]+ indel
+            
+            dis_matrix[m][n] = max(diag, left , up )
+            if dis_matrix[m][n] == diag:
+                Backtrack[m][n] = 3                     #3 signifies values obtained from diagonally
+            elif dis_matrix[m][n] == left:
+                Backtrack[m][n] = 2
+            elif dis_matrix[m][n] == up:
+                Backtrack[m][n] = 1
+            
+            if m==i or n ==j:
+                if dis_matrix[m][n] > max_score:
+                    max_score = dis_matrix[m][n]
+                    max_i, max_j = m,n
+    print(dis_matrix)
+    m = max_i
+    n = max_j
+    print("Score of the alignment is :", max_score)
+    while m>0 and n>0: 
+        if Backtrack[m][n] == 1:
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append('-')
+            m = m-1
+        elif Backtrack[m][n] ==2:
+            Alignment.append('-')
+            Alignment2.append(stringb[n-1])
+            n = n-1
+        elif Backtrack[m][n] == 3:
+             
+            Alignment.append(stringa[m-1]) 
+            Alignment2.append(stringb[n-1])
+            m = m-1
+            n = n-1
+    Alignment = ''.join(Alignment[::-1])
+    Alignment2 =''.join(Alignment2[::-1])
+      
+    print("", Alignment,'\n',Alignment2)
+    
+    
+        
+
+ma = 1 #match
+indel = -2#indel
+mm = -2 #mismatch
+
+stringa = "HEAGAWGHEE"
+stringb = "PAWHEAE"
+
+GlobalAlignment(stringa, stringb, ma, indel, mm)
